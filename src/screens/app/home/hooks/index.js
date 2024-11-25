@@ -1,16 +1,12 @@
 import { useState, useEffect, useCallback } from 'react';
-import { BackHandler, PermissionsAndroid, StatusBar } from 'react-native'
-import { GiftedChat } from 'react-native-gifted-chat';
+import { BackHandler, PermissionsAndroid } from 'react-native'
 import { navigate, goBack } from '../../../../navigation/rootNavigation';
-import { api, appIcons, appImages, countryList, routes } from '../../../../services';
-import firestore from '@react-native-firebase/firestore';
+import { countryList, routes } from '../../../../services';
 import { debounce } from 'lodash'
 import { API_KEY, TIME_ZONE } from '@env'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Geolocation from '@react-native-community/geolocation'
 import LinearGradient from 'react-native-linear-gradient';
-// import { DrawerActions } from '@react-navigation/native';
-// import { useDrawerStatus } from '@react-navigation/drawer';
 import { createShimmerPlaceholder } from 'react-native-shimmer-placeholder'
 
 export function useHooks() {
@@ -91,6 +87,7 @@ export function useHooks() {
     }, [])
 
     const getCurentLocation = () => {
+        setLoader(true);
         Geolocation.getCurrentPosition(async (position) => {
             const cords = {
                 latitude: position.coords.latitude,
@@ -208,7 +205,7 @@ export function useHooks() {
     const geoLocation = async (text) => {
         setSearch(text);
         if (text.length > 2) {
-            const url = `http://api.openweathermap.org/geo/1.0/direct?q=${text}&limit=${5}&appid=${API_KEY}`
+            const url = `https://api.openweathermap.org/geo/1.0/direct?q=${text}&limit=${5}&appid=${API_KEY}`
             let response = await fetch(url);
             response = await response.json();
             if (response) {
@@ -235,7 +232,7 @@ export function useHooks() {
         let response = await fetch(url);
         response = await response.json();
         if (response) {
-            setWeatherResults([]);
+            // setWeatherResults([]);
             setWeatherResults(response.list);
             const country = await getCountryName(response.city.country)
             setSearchButton(false);
@@ -248,9 +245,9 @@ export function useHooks() {
             console.log('Try Again')
         }
     }
-    const handleTextDebounce = useCallback(debounce((text) => geoLocation(text), 1200), []);
+    const handleTextDebounce = useCallback(debounce((text) => geoLocation(text), 300), []);
     const handleBackPress = () => {
-        navigate(routes.auth);
+        BackHandler.exitApp();
         return true;
     };
 

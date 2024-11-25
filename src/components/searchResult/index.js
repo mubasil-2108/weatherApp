@@ -12,7 +12,7 @@ const SearchResult = ({ search, searchButton, weatherCheck, getCurentLocation })
     return (
         <>
             {
-                search.length > 0 && searchButton ? (
+                updatedSearch.length > 0 && searchButton ? (
                     <Wrapper
                         animation={searchButton ? 'fadeIn' : 'fadeOut'}
                         justifyContentCenter

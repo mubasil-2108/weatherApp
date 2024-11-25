@@ -1,9 +1,9 @@
-import React, { useState, useCallback, useEffect } from 'react';
-import { Image, TouchableOpacity, FlatList, StyleSheet, RefreshControl } from 'react-native';
+import React from 'react';
+import { FlatList, StyleSheet, RefreshControl } from 'react-native';
 import { width, height, totalSize } from 'react-native-dimension';
-import { Wrapper, Icons, Headers, Modals, Text, ScrollViews, StatusBars, CategoryList, TextInputs, ProductList, Spacer, LocationLists, Images, Buttons, LocalsList, SearchResult, Charts } from '../../../components';
+import { Wrapper, Icons, Text, ScrollViews, StatusBars,TextInputs,Spacer, Images, SearchResult, Charts } from '../../../components';
 import { useHooks } from './hooks'
-import { appImages, colors, routes, sizes, fontSizes, appFonts, appIcons, responsiveWidth, responsiveHeight, weatherImages } from '../../../services';
+import { appImages, colors, sizes, fontSizes, appFonts, appIcons, weatherImages } from '../../../services';
 import { BlurView } from '@react-native-community/blur';
 import { Icon } from '@rneui/base';
 
@@ -35,8 +35,8 @@ export default function Home(props) {
     weatherResultsArray,
     loader,
     ShimmerPlaceholder,
-    weatherResults
-  } = useHooks() || { weatherResultsArray: [] };
+    weatherResults 
+  } = useHooks() || { weatherResults:[], weatherResultsArray: [] };
   return (
     <>
       <Wrapper isImageBackground source={appImages.backGroundImage} />
@@ -204,7 +204,7 @@ export default function Home(props) {
                 style={{ borderRadius: sizes.inputRadius, width: width(94), height: height(30)  }}></ShimmerPlaceholder>
                 </Wrapper>
               }
-              {!loader && weatherResultsArray.length > 0 ? (
+              {!loader ? (
                 <Charts.LineCharts weatherForecast={weatherResults} timezone={timezone} />
               ):null
             }
